@@ -97,6 +97,9 @@ type RepoSettingForm struct {
 	Private       bool
 	EnablePrune   bool
 
+	InitialCloneURL        string
+	InitialClonePrivateKey string
+
 	// Advanced settings
 	EnableWiki                       bool
 	EnableExternalWiki               bool

@@ -85,6 +85,8 @@ func SettingsPost(ctx *context.Context, form auth.RepoSettingForm) {
 		repo.LowerName = strings.ToLower(newRepoName)
 		repo.Description = form.Description
 		repo.Website = form.Website
+		repo.InitialCloneURL = form.InitialCloneURL
+		repo.InitialClonePrivateKey = form.InitialClonePrivateKey
 
 		// Visibility of forked repository is forced sync with base repository.
 		if repo.IsFork {

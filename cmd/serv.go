@@ -11,11 +11,13 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"code.gitea.io/gitea/models"
+	"code.gitea.io/gitea/modules/context"
 	"code.gitea.io/gitea/modules/log"
 	"code.gitea.io/gitea/modules/private"
 	"code.gitea.io/gitea/modules/setting"
@@ -305,6 +307,18 @@ func runServ(c *cli.Context) error {
 		gitcmd = exec.Command(verbs[0], verbs[1], repoPath)
 	} else {
 		gitcmd = exec.Command(verb, repoPath)
+	}
+
+	fullRepoDirPath := path.Join(setting.RepoRootPath, repoPath)
+	if _, err := os.Stat(fullRepoDirPath); os.IsNotExist(err) && repo.InitialCloneURL != "" {
+		err := context.InitialClone(
+			repo.InitialCloneURL,
+			repo.InitialClonePrivateKey,
+			fullRepoDirPath,
+		)
+		if err != nil {
+			log.GitLogger.Warn("Error in initial clone: %v", err)
+		}
 	}
 
 	if isWiki {

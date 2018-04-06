@@ -33,6 +33,15 @@
 					<input id="website" name="website" type="url" value="{{.Repository.Website}}">
 				</div>
 
+				<div class="field {{if .Err_InitialCloneURL}}error{{end}}">
+					<label for="initial_clone_url">{{.i18n.Tr "repo.settings.initial_clone_url"}}</label>
+					<input id="initial_clone_url" name="initial_clone_url" type="text" value="{{.Repository.InitialCloneURL}}">
+				</div>
+				<div class="field {{if .Err_InitialClonePrivateKey}}error{{end}}">
+					<label for="initial_clone_private_key">{{.i18n.Tr "repo.settings.initial_clone_private_key"}}</label>
+					<textarea id="initial_clone_private_key" name="initial_clone_private_key" rows="2">{{.Repository.InitialClonePrivateKey}}</textarea>
+				</div>
+
 				<div class="field">
 					<button class="ui green button">{{$.i18n.Tr "repo.settings.update_settings"}}</button>
 				</div>

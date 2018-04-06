@@ -8,6 +8,7 @@ package context
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
 	"strings"
 
@@ -345,8 +346,22 @@ func RepoAssignment() macaron.Handler {
 
 		gitRepo, err := git.OpenRepository(models.RepoPath(userName, repoName))
 		if err != nil {
-			ctx.ServerError("RepoAssignment Invalid repo "+models.RepoPath(userName, repoName), err)
-			return
+			if os.IsNotExist(err) && ctx.Repo.Repository.InitialCloneURL != "" {
+				localErr := InitialClone(
+					ctx.Repo.Repository.InitialCloneURL,
+					ctx.Repo.Repository.InitialClonePrivateKey,
+					models.RepoPath(userName, repoName),
+				)
+				if localErr != nil {
+					log.GitLogger.Warn("Error in initial clone: %v", localErr)
+				} else {
+					gitRepo, err = git.OpenRepository(models.RepoPath(userName, repoName))
+				}
+			}
+			if err != nil {
+				ctx.ServerError("RepoAssignment Invalid repo "+models.RepoPath(userName, repoName), err)
+				return
+			}
 		}
 		ctx.Repo.GitRepo = gitRepo
 		ctx.Repo.RepoLink = repo.Link()

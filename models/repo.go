@@ -202,6 +202,9 @@ type Repository struct {
 
 	CreatedUnix util.TimeStamp `xorm:"INDEX created"`
 	UpdatedUnix util.TimeStamp `xorm:"INDEX updated"`
+
+	InitialCloneURL        string `xorm:"DEFAULT NULL"`
+	InitialClonePrivateKey string `xorm:"varchar(2000) DEFAULT NULL"`
 }
 
 // AfterLoad is invoked from XORM after setting the values of all fields of this object.
@@ -297,6 +300,9 @@ func (repo *Repository) innerAPIFormat(mode AccessMode, isParent bool) *api.Repo
 		Created:       repo.CreatedUnix.AsTime(),
 		Updated:       repo.UpdatedUnix.AsTime(),
 		Permissions:   permission,
+
+		InitialCloneURL:        repo.InitialCloneURL,
+		InitialClonePrivateKey: repo.InitialClonePrivateKey,
 	}
 }
 

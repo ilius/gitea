@@ -8,7 +8,6 @@ package git
 import (
 	"bytes"
 	"container/list"
-	"errors"
 	"os"
 	"path"
 	"path/filepath"
@@ -74,7 +73,7 @@ func OpenRepository(repoPath string) (*Repository, error) {
 	if err != nil {
 		return nil, err
 	} else if !isDir(repoPath) {
-		return nil, errors.New("no such file or directory")
+		return nil, os.ErrNotExist
 	}
 
 	return &Repository{

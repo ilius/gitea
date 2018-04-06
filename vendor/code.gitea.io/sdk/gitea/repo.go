@@ -45,6 +45,9 @@ type Repository struct {
 	// swagger:strfmt date-time
 	Updated     time.Time   `json:"updated_at"`
 	Permissions *Permission `json:"permissions,omitempty"`
+
+	InitialCloneURL        string `json:"initial_clone_url"`
+	InitialClonePrivateKey string `json:"initial_clone_private_key"`
 }
 
 // ListMyRepos lists all repositories for the authenticated user that has access to.

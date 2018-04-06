@@ -299,6 +299,8 @@ func Action(ctx *context.Context) {
 
 		ctx.Repo.Repository.Description = ctx.Query("desc")
 		ctx.Repo.Repository.Website = ctx.Query("site")
+		ctx.Repo.Repository.InitialCloneURL = ctx.Query("initial_clone_url")
+		ctx.Repo.Repository.InitialClonePrivateKey = ctx.Query("initial_clone_private_key")
 		err = models.UpdateRepository(ctx.Repo.Repository, false)
 	}
 
