@@ -6,6 +6,7 @@
 package cmd
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -321,8 +322,15 @@ func runServ(c *cli.Context) error {
 	gitcmd.Dir = setting.RepoRootPath
 	gitcmd.Stdout = os.Stdout
 	gitcmd.Stdin = os.Stdin
-	gitcmd.Stderr = os.Stderr
+
+	errorBuff := bytes.NewBuffer(nil)
+	gitcmd.Stderr = errorBuff
+
 	if err = gitcmd.Run(); err != nil {
+		stderrText := errorBuff.String()
+		if stderrText != "" {
+			err = fmt.Errorf("%s: %s", err, stderrText)
+		}
 		fail("Internal error", "Failed to execute git command: %v", err)
 	}
 
